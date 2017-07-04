@@ -1,0 +1,66 @@
+version: '3.0'
+services:
+  mysql:
+    image: mysql:8
+    env_file:
+      - ./credentials.env
+    networks:
+      - back
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./credentials.env:/docker-entrypoint-initdb.d/credentials.env
+      - ./db/init_schema.sh:/docker-entrypoint-initdb.d/init_schema.sh
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    restart: always
+
+  rails:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - front
+      - back
+    volumes:
+      - web-sock:/web/camaleon_cms/tmp/sockets
+      - web-assets:/web/camaleon_cms/pubic
+    environment:
+      - RAILS_ENV=development
+      - MYSQL_HOST=mysql
+    env_file:
+      - ./credentials.env
+    depends_on:
+      - mysql
+    restart: always
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - web-sock:/web/camaleon_cms/tmp/sockets
+      - web-assets:/web/camaleon_cms/pubic
+      - ./nginx.conf:/etc/nginx/conf.d/rails.template
+    environment:
+      - APP_ROOT=/web/camaleon_cms
+    command: /bin/bash -c "envsubst '$$APP_ROOT' < /etc/nginx/conf.d/rails.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+    depends_on:
+      - rails
+    networks:
+      - front
+
+networks:
+  front:
+    external: false
+  back:
+    external: false
+
+volumes:
+  mysql-data:
+    driver: local
+    external: false
+  web-assets:
+    external: false
+  web-sock:
+    external: false
