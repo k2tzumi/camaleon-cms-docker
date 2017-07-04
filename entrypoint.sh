@@ -15,4 +15,5 @@ if [ -n "$MYSQL_USER" ]; then
 fi
 
 rake db:migrate
+rake assets:precompile
 rails server
