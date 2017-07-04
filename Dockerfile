@@ -43,7 +43,7 @@ RUN	true && \
 # app new
 	mkdir -p ${APP_ROOT} && \
 	cd ${APP_ROOT} && \
-	rails new -d mysql . && \
+	rails new -d mysql . --skip-bundle && \
         sed -i "s/^# gem 'therubyracer'/gem 'therubyracer'/g" Gemfile && \
 	echo "gem 'camaleon_cms', github: 'owen2345/camaleon-cms'" >> Gemfile && \
 	echo "gem 'draper', '~> 3'" >> Gemfile && \
