@@ -75,12 +75,15 @@ RUN     true && \
         source /etc/profile.d/rbenv.sh && \
 	cd ${APP_ROOT} && \
         rails generate camaleon_cms:install && \
+# current version copy
+	mkdir -p ${APP_ROOT}/../current && \
+	cp -R ${APP_ROOT}/* ${APP_ROOT}/../current/. && \
 # clean
 	yum clean all && \
         true
 
 # Expose volumes to nginx
-VOLUME [ "$APP_ROOT/public", "$APP_ROOT/tmp/sockets" ]
+VOLUME [ "$APP_ROOT", "$APP_ROOT/public", "$APP_ROOT/tmp/sockets" ]
 
 COPY	entrypoint.sh /
 
