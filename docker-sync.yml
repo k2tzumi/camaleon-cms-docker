@@ -16,14 +16,14 @@ sync_default: &sync_default
   sync_host_ip: 'auto'
   sync_host_port: 10871
 
-  sync_excludes: [ '.gitignore', '.git/', 'tmp/', 'tmp/cache' ]
+  sync_excludes: [ '.gitignore', '.git/', 'tmp/', 'tmp/cache', 'log', '.idea/' ]
   sync_excludes_type: 'Path'
 
   sync_strategy: 'unison'
   sync_userid: '500'
   sync_prefer: 'default'
      
-  watch_excludes: ['.gitignore', '.git/', 'vendor/bundle', 'tmp/', 'log/']
+  watch_excludes: [ '.*/.git', '.gitignore', '.git/', 'vendor/bundle', 'tmp/', 'log/', '.idea/' ]
   watch_args: '-v'
   watch_strategy: 'fswatch'
      
