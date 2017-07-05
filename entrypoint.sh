@@ -30,6 +30,10 @@ fi
 
 if [[ "$1" = "rails" && ("$2" = "s" || "$2" = "server") ]]; then
   rake assets:precompile
+
+  if [ -f tmp/pids/server.pid ]; then
+    rm tmp/pids/server.pid
+  fi
 fi
 
 exec "$@"
