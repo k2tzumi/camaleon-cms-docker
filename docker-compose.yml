@@ -23,8 +23,9 @@ services:
       - front
       - back
     volumes:
+      - ./camaleon_cms/:/web/camaleon_cms/:rw
       - web-sock:/web/camaleon_cms/tmp/sockets
-      - web-assets:/web/camaleon_cms/pubic
+      - web-assets:/web/camaleon_cms/public
     environment:
       - RAILS_ENV=development
       - MYSQL_HOST=mysql
@@ -32,6 +33,8 @@ services:
       - ./credentials.env
     depends_on:
       - mysql
+    stdin_open: true
+    tty: true
     restart: always
 
   nginx:
@@ -40,7 +43,7 @@ services:
       - "80:80"
     volumes:
       - web-sock:/web/camaleon_cms/tmp/sockets
-      - web-assets:/web/camaleon_cms/pubic
+      - web-assets:/web/camaleon_cms/public
       - ./nginx.conf:/etc/nginx/conf.d/rails.template
     environment:
       - APP_ROOT=/web/camaleon_cms
@@ -61,6 +64,8 @@ volumes:
     driver: local
     external: false
   web-assets:
+    driver: local
     external: false
   web-sock:
+    driver: local
     external: false
