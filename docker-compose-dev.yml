@@ -1,0 +1,11 @@
+version: '3.0'
+services:
+  rails:
+    volumes:
+      - rails-app:/web/camaleon_cms/:rw,nocopy
+      - web-sock:/web/camaleon_cms/tmp/sockets
+      - web-assets:/web/camaleon_cms/public
+
+volumes:
+  rails-app:
+    external: true
